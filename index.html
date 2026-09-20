@@ -53,6 +53,30 @@
             --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-hover: #f1f5f9;
+            
+            --accent-primary: #4f46e5;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #9333ea;
+            --accent-glow: rgba(79, 70, 229, 0.2);
+            
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-tertiary: #94a3b8;
+            
+            --border-subtle: rgba(15, 23, 42, 0.08);
+            --border-medium: rgba(15, 23, 42, 0.12);
+            --border-strong: rgba(15, 23, 42, 0.2);
+            
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-glow: 0 0 40px rgba(79, 70, 229, 0.15);
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-primary);
@@ -77,6 +101,10 @@
             pointer-events: none;
         }
 
+        [data-theme="light"] .bg-grid {
+            opacity: 0.5;
+        }
+
         .bg-glow {
             position: fixed;
             top: -50%;
@@ -88,6 +116,10 @@
             z-index: -1;
             pointer-events: none;
             animation: pulse 8s ease-in-out infinite;
+        }
+
+        [data-theme="light"] .bg-glow {
+            opacity: 0.3;
         }
 
         @keyframes pulse {
@@ -114,6 +146,10 @@
             position: sticky;
             top: 0;
             z-index: 100;
+        }
+
+        [data-theme="light"] .header {
+            background: rgba(255, 255, 255, 0.85);
         }
 
         .logo {
@@ -161,6 +197,42 @@
             display: flex;
             align-items: center;
             gap: 16px;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-base);
+            color: var(--text-secondary);
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+            border-color: var(--border-medium);
+        }
+
+        .theme-toggle .sun-icon {
+            display: none;
+        }
+
+        .theme-toggle .moon-icon {
+            display: block;
+        }
+
+        [data-theme="light"] .theme-toggle .sun-icon {
+            display: block;
+        }
+
+        [data-theme="light"] .theme-toggle .moon-icon {
+            display: none;
         }
 
         .progress-indicator {
@@ -211,6 +283,11 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+        }
+
+        [data-theme="light"] .sidebar {
+            background: var(--bg-secondary);
+            border-right-color: var(--border-subtle);
         }
 
         .nav-label {
@@ -573,6 +650,582 @@
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
 
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-base);
+        }
+
+        .modal-close:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        /* Practice Modal Specific */
+        .scenario-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .scenario-tag, .capability-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .scenario-tag {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent-primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .capability-badge {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-secondary);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .scenario-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .evidence-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .evidence-card {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+        }
+
+        .evidence-icon {
+            font-size: 32px;
+        }
+
+        .evidence-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .evidence-stat {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 4px;
+        }
+
+        .evidence-detail {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .practice-question h4 {
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .option-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .option-item:hover {
+            border-color: var(--border-medium);
+            background: var(--bg-hover);
+        }
+
+        .option-item input[type="radio"] {
+            margin-top: 4px;
+            accent-color: var(--accent-primary);
+        }
+
+        .option-item.selected {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .option-content strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .option-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Case Workspace Modal */
+        .case-workspace {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-xl);
+            width: 95%;
+            max-width: 1400px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .case-sidebar {
+            background: var(--bg-tertiary);
+            border-right: 1px solid var(--border-subtle);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .case-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: 20px;
+        }
+
+        .case-tag {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+        }
+
+        .case-progress {
+            font-size: 18px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .case-stages {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .stage {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            transition: var(--transition-base);
+        }
+
+        .stage.completed {
+            opacity: 0.6;
+        }
+
+        .stage.completed .stage-indicator {
+            background: var(--success);
+            color: white;
+        }
+
+        .stage.active {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .stage.active .stage-indicator {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .stage.locked {
+            opacity: 0.4;
+        }
+
+        .stage.locked .stage-indicator {
+            background: var(--bg-hover);
+            color: var(--text-tertiary);
+        }
+
+        .stage-indicator {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .stage-info {
+            flex: 1;
+        }
+
+        .stage-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .stage-subtitle {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .case-main {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .case-main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 32px 40px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .case-stage-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .case-main-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .btn-ai {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: var(--radius-md);
+            color: var(--accent-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .btn-ai:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%);
+        }
+
+        .case-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+        }
+
+        .task-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+        }
+
+        .task-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+
+        .task-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .data-preview {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .data-header span {
+            font-weight: 600;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            background: var(--bg-hover);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .btn-sm:hover {
+            background: var(--bg-secondary);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            flex: 1;
+            gap: 8px;
+            padding: 0 10px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            min-height: 20px;
+            transition: height 0.5s ease;
+        }
+
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+
+        .chart-labels {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 10px 0;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .analysis-input {
+            margin-bottom: 24px;
+        }
+
+        .analysis-input label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .analysis-input textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .analysis-input textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .dimension-selector {
+            margin-bottom: 24px;
+        }
+
+        .dimension-selector label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .dimension-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .dimension-btn {
+            padding: 14px 20px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-base);
+            text-align: center;
+        }
+
+        .dimension-btn:hover {
+            border-color: var(--accent-primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .case-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 24px 40px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-tertiary);
+        }
+
+        @media (max-width: 1200px) {
+            .case-workspace {
+                grid-template-columns: 1fr;
+                max-height: none;
+                height: 90vh;
+            }
+
+            .case-sidebar {
+                max-height: 200px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-subtle);
+            }
+
+            .case-stages {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .stage {
+                flex-shrink: 0;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                width: 80px;
+            }
+
+            .stage-info {
+                display: none;
+            }
+        }
+
         @media (max-width: 1200px) {
             .app-shell {
                 grid-template-columns: 1fr;
@@ -610,6 +1263,15 @@
             </div>
 
             <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+                    <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                    <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
                 <div class="progress-indicator">
                     <svg class="progress-ring" viewBox="0 0 36 36">
                         <defs>
@@ -804,7 +1466,7 @@
                         <span class="tag">Analytical Reasoning</span>
                         <span class="tag">Evidence</span>
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 16px; width: 100%;">
+                    <button class="btn btn-primary" style="margin-top: 16px; width: 100%;" onclick="showPracticeModal()">
                         Start Practice →
                     </button>
                 </div>
@@ -817,7 +1479,7 @@
                         <span class="tag">Transfer Challenge</span>
                         <span class="tag">Advanced</span>
                     </div>
-                    <button class="btn btn-primary" style="margin-top: 16px; width: 100%;">
+                    <button class="btn btn-primary" style="margin-top: 16px; width: 100%;" onclick="showCaseWorkspace()">
                         Enter Mission →
                     </button>
                 </div>
@@ -825,13 +1487,321 @@
         </main>
     </div>
 
+    <!-- Practice Modal -->
+    <div id="practiceModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Evidence Evaluation Challenge</h3>
+                <button class="modal-close" onclick="closePracticeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="practice-scenario">
+                    <div class="scenario-header">
+                        <span class="scenario-tag">Scenario</span>
+                        <span class="capability-badge">Analytical Reasoning</span>
+                    </div>
+                    <p class="scenario-text">Your stakeholder says: "I noticed that customers who use our mobile app have higher retention rates. Should we invest more in mobile features?"</p>
+                    
+                    <div class="evidence-cards">
+                        <div class="evidence-card">
+                            <div class="evidence-icon">📱</div>
+                            <div class="evidence-content">
+                                <div class="evidence-title">Mobile App Users</div>
+                                <div class="evidence-stat">78% retention rate</div>
+                                <div class="evidence-detail">Sample: 5,000 users · Last 90 days</div>
+                            </div>
+                        </div>
+                        <div class="evidence-card">
+                            <div class="evidence-icon">💻</div>
+                            <div class="evidence-content">
+                                <div class="evidence-title">Desktop Only Users</div>
+                                <div class="evidence-stat">52% retention rate</div>
+                                <div class="evidence-detail">Sample: 3,200 users · Last 90 days</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="practice-question">
+                        <h4>What should you consider before recommending increased mobile investment?</h4>
+                        
+                        <div class="option-list">
+                            <label class="option-item">
+                                <input type="radio" name="practice-answer" value="a">
+                                <div class="option-content">
+                                    <strong>Yes, the data clearly shows mobile users are more loyal</strong>
+                                    <p>The 26% difference in retention is significant and actionable.</p>
+                                </div>
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="practice-answer" value="b">
+                                <div class="option-content">
+                                    <strong>Check if there's a self-selection bias</strong>
+                                    <p>Power users may be more likely to download the app in the first place.</p>
+                                </div>
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="practice-answer" value="c">
+                                <div class="option-content">
+                                    <strong>Analyze customer demographics first</strong>
+                                    <p>Age, location, and purchase history might explain the difference.</p>
+                                </div>
+                            </label>
+                            <label class="option-item selected">
+                                <input type="radio" name="practice-answer" value="d" checked>
+                                <div class="option-content">
+                                    <strong>Both B and C</strong>
+                                    <p>Correlation doesn't imply causation — need to control for confounding variables.</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePracticeModal()">Skip</button>
+                <button class="btn btn-primary" onclick="submitPracticeAnswer()">Submit Answer →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Workspace Modal -->
+    <div id="caseWorkspaceModal" class="modal-overlay" style="display: none;">
+        <div class="case-workspace">
+            <div class="case-sidebar">
+                <div class="case-header">
+                    <div class="case-tag">CASE 01</div>
+                    <div class="case-progress">68%</div>
+                </div>
+                <div class="case-stages">
+                    <div class="stage completed">
+                        <div class="stage-indicator">✓</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Context</div>
+                            <div class="stage-subtitle">Understand the business situation</div>
+                        </div>
+                    </div>
+                    <div class="stage completed">
+                        <div class="stage-indicator">✓</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Frame</div>
+                            <div class="stage-subtitle">Define the analytical question</div>
+                        </div>
+                    </div>
+                    <div class="stage completed">
+                        <div class="stage-indicator">✓</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Define</div>
+                            <div class="stage-subtitle">Establish metrics & scope</div>
+                        </div>
+                    </div>
+                    <div class="stage completed">
+                        <div class="stage-indicator">✓</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Data</div>
+                            <div class="stage-subtitle">Understand available data</div>
+                        </div>
+                    </div>
+                    <div class="stage completed">
+                        <div class="stage-indicator">✓</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Validate</div>
+                            <div class="stage-subtitle">Check data quality</div>
+                        </div>
+                    </div>
+                    <div class="stage active">
+                        <div class="stage-indicator">6</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Explore</div>
+                            <div class="stage-subtitle">Investigate patterns & anomalies</div>
+                        </div>
+                    </div>
+                    <div class="stage locked">
+                        <div class="stage-indicator">7</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Segment</div>
+                            <div class="stage-subtitle">Break down by dimensions</div>
+                        </div>
+                    </div>
+                    <div class="stage locked">
+                        <div class="stage-indicator">8</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Hypothesis</div>
+                            <div class="stage-subtitle">Formulate explanations</div>
+                        </div>
+                    </div>
+                    <div class="stage locked">
+                        <div class="stage-indicator">9</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Evidence</div>
+                            <div class="stage-subtitle">Evaluate supporting data</div>
+                        </div>
+                    </div>
+                    <div class="stage locked">
+                        <div class="stage-indicator">10</div>
+                        <div class="stage-info">
+                            <div class="stage-title">Decide</div>
+                            <div class="stage-subtitle">Recommend actions</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close" onclick="closeCaseWorkspace()">✕</button>
+            </div>
+            <div class="case-main">
+                <div class="case-main-header">
+                    <div>
+                        <div class="case-stage-label">STAGE 06 · EXPLORATION</div>
+                        <h2>Why did revenue decline last month?</h2>
+                    </div>
+                    <button class="btn btn-ai">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 2v2M12 20v2M2 12h2M20 12h2"></path>
+                        </svg>
+                        AI Assistant
+                    </button>
+                </div>
+                
+                <div class="case-content">
+                    <div class="task-card">
+                        <div class="task-label">YOUR TASK</div>
+                        <p class="task-description">Explore the revenue data to identify patterns, trends, and anomalies. Look for dimensions that might explain the 18% decline from August to September.</p>
+                        
+                        <div class="data-preview">
+                            <div class="data-header">
+                                <span>Revenue by Week (Last 8 Weeks)</span>
+                                <button class="btn-sm">Export Data</button>
+                            </div>
+                            <div class="chart-placeholder">
+                                <div class="chart-bars">
+                                    <div class="chart-bar" style="height: 75%;"><span>$125K</span></div>
+                                    <div class="chart-bar" style="height: 82%;"><span>$136K</span></div>
+                                    <div class="chart-bar" style="height: 78%;"><span>$130K</span></div>
+                                    <div class="chart-bar" style="height: 85%;"><span>$142K</span></div>
+                                    <div class="chart-bar" style="height: 70%;"><span>$117K</span></div>
+                                    <div class="chart-bar" style="height: 65%;"><span>$108K</span></div>
+                                    <div class="chart-bar" style="height: 62%;"><span>$103K</span></div>
+                                    <div class="chart-bar" style="height: 58%;"><span>$97K</span></div>
+                                </div>
+                                <div class="chart-labels">
+                                    <span>W1</span><span>W2</span><span>W3</span><span>W4</span>
+                                    <span>W5</span><span>W6</span><span>W7</span><span>W8</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-input">
+                            <label>What patterns do you observe?</label>
+                            <textarea placeholder="Describe the trends and anomalies you notice in the data..."></textarea>
+                        </div>
+
+                        <div class="dimension-selector">
+                            <label>Which dimension should you investigate next?</label>
+                            <div class="dimension-options">
+                                <button class="dimension-btn">Customer Segment</button>
+                                <button class="dimension-btn">Product Category</button>
+                                <button class="dimension-btn">Geographic Region</button>
+                                <button class="dimension-btn">Channel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="case-footer">
+                    <button class="btn btn-secondary" onclick="closeCaseWorkspace()">Save Draft</button>
+                    <button class="btn btn-primary">Continue Investigation →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Progress ring animation
             const progressRing = document.querySelector('.progress-ring__progress');
             const progress = 72;
             const circumference = 2 * Math.PI * 16;
             const offset = circumference - (progress / 100) * circumference;
             progressRing.style.strokeDashoffset = offset;
+
+            // Theme toggle functionality
+            const themeToggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+            
+            // Check for saved theme preference or default to dark
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            html.setAttribute('data-theme', savedTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = html.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+
+            // Option selection handling
+            const optionItems = document.querySelectorAll('.option-item');
+            optionItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    optionItems.forEach(i => i.classList.remove('selected'));
+                    item.classList.add('selected');
+                    item.querySelector('input').checked = true;
+                });
+            });
+        });
+
+        // Modal functions
+        function showPracticeModal() {
+            const modal = document.getElementById('practiceModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closePracticeModal() {
+            const modal = document.getElementById('practiceModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function showCaseWorkspace() {
+            const modal = document.getElementById('caseWorkspaceModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
+        }
+
+        function closeCaseWorkspace() {
+            const modal = document.getElementById('caseWorkspaceModal');
+            modal.classList.remove('active');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function submitPracticeAnswer() {
+            const selected = document.querySelector('.option-item.selected');
+            if (selected) {
+                const answer = selected.querySelector('input').value;
+                if (answer === 'd') {
+                    alert('✓ Correct! Correlation doesn\\'t imply causation. You should always check for confounding variables like self-selection bias and demographic differences before making recommendations.');
+                } else {
+                    alert('Consider: Could there be other factors explaining this correlation? Think about self-selection bias and customer demographics.');
+                }
+            }
+        }
+
+        // Close modals on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal-overlay')) {
+                e.target.classList.remove('active');
+                setTimeout(() => e.target.style.display = 'none', 300);
+            }
+        });
+
+        // Dimension button selection
+        document.querySelectorAll('.dimension-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.dimension-btn').forEach(b => b.style.borderColor = '');
+                document.querySelectorAll('.dimension-btn').forEach(b => b.style.background = '');
+                this.style.borderColor = 'var(--accent-primary)';
+                this.style.background = 'rgba(99, 102, 241, 0.1)';
+            };
         });
     </script>
 </body>
