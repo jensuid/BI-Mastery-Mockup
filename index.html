@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BI Mastery — AI Agent Era</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --bg-card: #16161f;
+            --bg-hover: #1e1e2a;
+            
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-tertiary: #a855f7;
+            --accent-glow: rgba(99, 102, 241, 0.4);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --info: #3b82f6;
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-tertiary: #71717a;
+            
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-medium: rgba(255, 255, 255, 0.12);
+            --border-strong: rgba(255, 255, 255, 0.2);
+            
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
+            
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--border-subtle) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 150%;
+            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.5;
+            z-index: -1;
+            pointer-events: none;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        .app-shell {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            grid-template-rows: 70px 1fr;
+            min-height: 100vh;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-tertiary);
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            width: 320px;
+        }
+
+        .search-bar kbd {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--text-tertiary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .progress-ring {
+            width: 32px;
+            height: 32px;
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 3;
+        }
+
+        .progress-ring__bg {
+            stroke: var(--border-subtle);
+        }
+
+        .progress-ring__progress {
+            stroke: url(#gradient);
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: center;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: 2px solid var(--border-medium);
+            cursor: pointer;
+        }
+
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-subtle);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            padding: 0 12px;
+            margin-bottom: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            transition: var(--transition-base);
+        }
+
+        .nav-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--text-primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .mission-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            margin-top: auto;
+        }
+
+        .mission-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+
+        .mission-progress-bar {
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .mission-progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+
+        .mission-percentage {
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-content {
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .greeting {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .mission-hero {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-tertiary) 100%);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+        }
+
+        .mission-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 24px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .mission-hero h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .mission-hero p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            max-width: 600px;
+        }
+
+        .progress-track {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition-base);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--accent-glow);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 40px 0 24px;
+        }
+
+        .capability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .capability-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .capability-card:hover {
+            border-color: var(--border-medium);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .capability-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 24px;
+        }
+
+        .capability-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .capability-level {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .capability-bar {
+            height: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .capability-bar-fill {
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .level-strong { background: var(--gradient-success); }
+        .level-developing { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
+        .level-practice { background: linear-gradient(135deg, #ef4444 0%, #f87171 100%); }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .recommended-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .recommendation-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+        }
+
+        .recommendation-type {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+        }
+
+        .recommendation-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .recommendation-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--bg-tertiary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        @media (max-width: 1200px) {
+            .app-shell {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .recommended-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <div class="app-shell">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">◈</div>
+                <span>BI MASTERY</span>
+            </div>
+            
+            <div class="search-bar">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <span style="color: var(--text-tertiary); font-size: 14px;">Search capabilities, cases...</span>
+                <kbd>⌘K</kbd>
+            </div>
+
+            <div class="header-actions">
+                <div class="progress-indicator">
+                    <svg class="progress-ring" viewBox="0 0 36 36">
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#6366f1"/>
+                                <stop offset="50%" stop-color="#8b5cf6"/>
+                                <stop offset="100%" stop-color="#a855f7"/>
+                            </linearGradient>
+                        </defs>
+                        <circle class="progress-ring__bg" cx="18" cy="18" r="16"/>
+                        <circle class="progress-ring__progress" cx="18" cy="18" r="16" 
+                                stroke-dasharray="100" stroke-dashoffset="28"/>
+                    </svg>
+                    <span style="font-weight: 600; font-size: 14px;">72%</span>
+                </div>
+                <button class="profile-btn"></button>
+            </div>
+        </header>
+
+        <aside class="sidebar">
+            <div class="nav-label">Navigation</div>
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Home
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+                Learn
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="21" y2="18"></line>
+                    <path d="M21 21H7a2 2 0 0 1-2-2V7"></path>
+                </svg>
+                Practice
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                Cases
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 2v2M12 20v2M2 12h2M20 12h2"></path>
+                </svg>
+                AI Lab
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                Mastery
+            </div>
+
+            <div class="mission-card">
+                <div class="mission-label">Current Mission</div>
+                <div style="font-weight: 600; margin-bottom: 12px; font-size: 14px;">Revenue Intelligence</div>
+                <div class="mission-progress-bar">
+                    <div class="mission-progress-fill" style="width: 68%;"></div>
+                </div>
+                <div class="mission-percentage">68%</div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="fade-in">
+                <div class="greeting">Good morning, Analyst</div>
+                <h1 class="page-title">Continue your analytical journey</h1>
+                <p class="page-subtitle">You're on a mission to uncover insights and drive business decisions</p>
+            </div>
+
+            <div class="stats-row fade-in delay-1">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Cases Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">847</div>
+                    <div class="stat-label">Evidence Cards</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">AI Verification Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Capabilities Strong</div>
+                </div>
+            </div>
+
+            <div class="mission-hero fade-in delay-2">
+                <div class="mission-tag">
+                    <span class="status-dot"></span>
+                    IN PROGRESS · Stage 6 of 10
+                </div>
+                
+                <h2>Why did revenue decline last month?</h2>
+                <p>E-commerce Revenue Intelligence case · Leadership needs to understand the root cause and determine what action to take</p>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 14px; color: var(--text-secondary);">Investigation Progress</span>
+                    <span style="font-size: 14px; font-weight: 600;">68% Complete</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: 68%;"></div>
+                </div>
+
+                <button class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    Continue Investigation
+                </button>
+            </div>
+
+            <h2 class="section-title fade-in delay-3">Your Capability Growth</h2>
+            
+            <div class="capability-grid fade-in delay-4">
+                <div class="capability-card">
+                    <div class="capability-icon">📊</div>
+                    <div class="capability-name">Business Framing</div>
+                    <div class="capability-level">Level 4 · Strong</div>
+                    <div class="capability-bar">
+                        <div class="capability-bar-fill level-strong" style="width: 85%;"></div>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">🧠</div>
+                    <div class="capability-name">Data Reasoning</div>
+                    <div class="capability-level">Level 3 · Developing</div>
+                    <div class="capability-bar">
+                        <div class="capability-bar-fill level-developing" style="width: 65%;"></div>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">🔍</div>
+                    <div class="capability-name">Analytical Reasoning</div>
+                    <div class="capability-level">Level 2 · Practice Needed</div>
+                    <div class="capability-bar">
+                        <div class="capability-bar-fill level-practice" style="width: 45%;"></div>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">📈</div>
+                    <div class="capability-name">Visualization</div>
+                    <div class="capability-level">Level 3 · Developing</div>
+                    <div class="capability-bar">
+                        <div class="capability-bar-fill level-developing" style="width: 70%;"></div>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">💬</div>
+                    <div class="capability-name">Communication</div>
+                    <div class="capability-level">Level 4 · Strong</div>
+                    <div class="capability-bar">
+                        <div class="capability-bar-fill level-strong" style="width: 80%;"></div>
+                    </div>
+                </div>
+
+                <div class="capability-card">
+                    <div class="capability-icon">🤖</div>
+                    <div class="capability-name">AI Collaboration</div>
+                    <div class="capability-level">Level 3 · Developing</div>
+                    <div class="capability-bar">
+                        <div class="capability-bar-fill level-developing" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title fade-in delay-4">Recommended Next</h2>
+            
+            <div class="recommended-section fade-in delay-4">
+                <div class="recommendation-card">
+                    <div class="recommendation-type">Targeted Practice</div>
+                    <div class="recommendation-title">Evidence Evaluation Challenge</div>
+                    <p class="recommendation-desc">Strengthen your ability to distinguish correlation from causation and evaluate evidence quality</p>
+                    <div>
+                        <span class="tag">Analytical Reasoning</span>
+                        <span class="tag">Evidence</span>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 16px; width: 100%;">
+                        Start Practice →
+                    </button>
+                </div>
+
+                <div class="recommendation-card">
+                    <div class="recommendation-type">New Case</div>
+                    <div class="recommendation-title">Subscription Retention Analysis</div>
+                    <p class="recommendation-desc">Apply your analytical capabilities to a new domain context with less guidance</p>
+                    <div>
+                        <span class="tag">Transfer Challenge</span>
+                        <span class="tag">Advanced</span>
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 16px; width: 100%;">
+                        Enter Mission →
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const progressRing = document.querySelector('.progress-ring__progress');
+            const progress = 72;
+            const circumference = 2 * Math.PI * 16;
+            const offset = circumference - (progress / 100) * circumference;
+            progressRing.style.strokeDashoffset = offset;
+        });
+    </script>
+</body>
+</html>
